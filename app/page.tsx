@@ -2,10 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 import LeadModal from '@/components/LeadModal'
+import { GA } from '@/components/GoogleAnalytics'
 
-/* ─────────────────────────────────────
-   REVEAL WRAPPER — scroll animation
-───────────────────────────────────── */
 function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -25,9 +23,6 @@ function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
   )
 }
 
-/* ─────────────────────────────────────
-   NAVBAR
-───────────────────────────────────── */
 function Navbar({ onOpenModal }: { onOpenModal: () => void }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
@@ -49,14 +44,14 @@ function Navbar({ onOpenModal }: { onOpenModal: () => void }) {
     <>
       <nav className="nav" style={{ borderBottomColor: scrolled ? 'var(--border2)' : 'var(--border)' }}>
         <a href="#" className="nav-logo">K<span>teck</span></a>
-
         <ul className="nav-links">
           {links.map(l => <li key={l.href}><a href={l.href}>{l.label}</a></li>)}
         </ul>
-
         <div className="nav-actions">
           <button className="btn-ghost-nav">Entrar</button>
-          <button className="btn-cta-nav" onClick={onOpenModal}>Começar grátis →</button>
+          <button className="btn-cta-nav" onClick={() => { GA.ctaClick('Navbar — Começar grátis'); onOpenModal() }}>
+            Começar grátis →
+          </button>
           <button className="nav-hamburger" onClick={() => setOpen(o => !o)}>
             {open ? '✕' : '☰'}
           </button>
@@ -68,7 +63,8 @@ function Navbar({ onOpenModal }: { onOpenModal: () => void }) {
           {links.map(l => (
             <a key={l.href} href={l.href} onClick={() => setOpen(false)}>{l.label}</a>
           ))}
-          <button className="btn-cta-nav" onClick={() => { onOpenModal(); setOpen(false) }}
+          <button className="btn-cta-nav"
+            onClick={() => { GA.ctaClick('Navbar Mobile — Começar grátis'); onOpenModal(); setOpen(false) }}
             style={{ width: '100%', padding: 14, marginTop: 4 }}>
             Começar grátis →
           </button>
@@ -78,9 +74,6 @@ function Navbar({ onOpenModal }: { onOpenModal: () => void }) {
   )
 }
 
-/* ─────────────────────────────────────
-   HERO
-───────────────────────────────────── */
 function Hero({ onOpenModal }: { onOpenModal: () => void }) {
   const stats = [
     { val: '+3.400', lbl: 'Empresas ativas' },
@@ -88,34 +81,33 @@ function Hero({ onOpenModal }: { onOpenModal: () => void }) {
     { val: '12M+',   lbl: 'Mensagens / mês' },
     { val: '<60s',   lbl: 'Tempo de setup'  },
   ]
-
   return (
     <section className="hero">
       <div className="hero-grid" />
       <div className="hero-halo" />
       <div className="hero-ring" />
-
       <div className="hero-inner">
         <div className="hero-badge">
           <span className="badge-dot" />
           +3.400 empresas já crescem com IA
         </div>
-
         <h1 className="hero-h1">
-          Sua empresa<br />
-          <span className="hl">cresce com IA.</span>
+          Sua empresa<br /><span className="hl">cresce com IA.</span>
         </h1>
-
         <p className="hero-sub">
           Automatize atendimento, venda mais e tome decisões com dados.
           Plataforma completa — sem precisar programar.
         </p>
-
         <div className="hero-btns">
-          <button className="btn-primary" onClick={onOpenModal}>Testar gratuitamente</button>
-          <button className="btn-outline">Ver demonstração ▶</button>
+          <button className="btn-primary"
+            onClick={() => { GA.ctaClick('Hero — Testar gratuitamente'); onOpenModal() }}>
+            Testar gratuitamente
+          </button>
+          <button className="btn-outline"
+            onClick={() => GA.ctaClick('Hero — Ver demonstração')}>
+            Ver demonstração ▶
+          </button>
         </div>
-
         <div className="hero-stats">
           {stats.map((s, i) => (
             <div key={i} style={{ textAlign: 'center' }}>
@@ -129,9 +121,6 @@ function Hero({ onOpenModal }: { onOpenModal: () => void }) {
   )
 }
 
-/* ─────────────────────────────────────
-   LOGOS
-───────────────────────────────────── */
 function Logos() {
   const brands = ['NEXUS', 'VERTI', 'PRAGMA', 'BLUECORE', 'SOLVA', 'TECKART', 'ORION']
   return (
@@ -144,9 +133,6 @@ function Logos() {
   )
 }
 
-/* ─────────────────────────────────────
-   FEATURES
-───────────────────────────────────── */
 function Features() {
   const cards = [
     { icon: '🤖', title: 'Agentes de IA',          desc: 'Crie assistentes treinados com o conhecimento da sua empresa. Atendimento 24h no WhatsApp, Instagram e site.', tag: 'Plug & Play'   },
@@ -156,7 +142,6 @@ function Features() {
     { icon: '📦', title: 'Marketplace de Apps',     desc: 'Instale soluções prontas de IA por setor em um clique. Jurídico, saúde, varejo, imobiliário e muito mais.',    tag: '+120 apps'    },
     { icon: '🔐', title: 'Segurança Enterprise',    desc: 'LGPD compliant, dados no Brasil, criptografia end-to-end e controle granular de permissões por usuário.',       tag: 'LGPD'         },
   ]
-
   return (
     <section className="sec" id="funcionalidades">
       <div className="wrap">
@@ -182,11 +167,8 @@ function Features() {
   )
 }
 
-/* ─────────────────────────────────────
-   PLATFORM MOCKUP
-───────────────────────────────────── */
 function PlatformMockup() {
-  const sideItems = [
+  const sideItems  = [
     { icon: '📊', label: 'Dashboard',    on: true  },
     { icon: '🤖', label: 'Meus Agentes', on: false },
     { icon: '💬', label: 'Conversas',    on: false },
@@ -196,7 +178,6 @@ function PlatformMockup() {
     { icon: '🎓', label: 'Academia',    on: false },
     { icon: '📦', label: 'Marketplace', on: false },
   ]
-
   return (
     <section className="sec sec-alt">
       <div className="wrap">
@@ -284,9 +265,6 @@ function PlatformMockup() {
   )
 }
 
-/* ─────────────────────────────────────
-   HOW IT WORKS
-───────────────────────────────────── */
 function HowItWorks() {
   const items = [
     { n: '01', title: 'Crie sua conta',    desc: 'Cadastro em 30 segundos, sem cartão de crédito. Acesso imediato a todos os recursos.' },
@@ -318,9 +296,6 @@ function HowItWorks() {
   )
 }
 
-/* ─────────────────────────────────────
-   ACADEMY
-───────────────────────────────────── */
 function Academy({ onOpenModal }: { onOpenModal: () => void }) {
   const courses = [
     { emoji: '🤖', title: 'Agentes de IA', meta: '12 aulas', level: 'Iniciante'     },
@@ -336,24 +311,16 @@ function Academy({ onOpenModal }: { onOpenModal: () => void }) {
             <span className="eyebrow">Academia Kteck</span>
             <h2 className="sec-title">Aprenda a criar e vender soluções de IA</h2>
             <p className="sec-sub" style={{ marginBottom: 28 }}>
-              Cursos práticos para você e sua equipe dominarem a IA e aplicarem
-              no negócio desde o primeiro dia.
+              Cursos práticos para você e sua equipe dominarem a IA e aplicarem no negócio desde o primeiro dia.
             </p>
-            {[
-              'Crie agentes de IA do zero',
-              'Automatize processos sem código',
-              'Venda soluções de IA para clientes',
-              'Certificado reconhecido pelo mercado',
-            ].map((t, i) => (
-              <div key={i} className="check-item">
-                <span>✓</span><span>{t}</span>
-              </div>
+            {['Crie agentes de IA do zero', 'Automatize processos sem código', 'Venda soluções de IA para clientes', 'Certificado reconhecido pelo mercado'].map((t, i) => (
+              <div key={i} className="check-item"><span>✓</span><span>{t}</span></div>
             ))}
-            <button className="btn-primary" style={{ marginTop: 28 }} onClick={onOpenModal}>
+            <button className="btn-primary" style={{ marginTop: 28 }}
+              onClick={() => { GA.ctaClick('Academy — Explorar cursos'); onOpenModal() }}>
               Explorar cursos
             </button>
           </Reveal>
-
           <Reveal delay={140}>
             <div className="course-grid">
               {courses.map((c, i) => (
@@ -372,34 +339,30 @@ function Academy({ onOpenModal }: { onOpenModal: () => void }) {
   )
 }
 
-/* ─────────────────────────────────────
-   PRICING
-───────────────────────────────────── */
 function Pricing({ onOpenModal }: { onOpenModal: () => void }) {
   const plans = [
     {
       name: 'Starter', price: '0', period: '/mês',
       desc: 'Para testar e criar seu primeiro agente de IA.',
       feats: ['1 agente de IA', '500 mensagens/mês', 'WhatsApp (modo teste)', 'Suporte por e-mail'],
-      off:   ['Analytics avançado', 'Marketplace de Apps', 'API access'],
+      off: ['Analytics avançado', 'Marketplace de Apps', 'API access'],
       cta: 'Começar grátis', best: false,
     },
     {
       name: 'Profissional', price: '397', period: '/mês',
       desc: 'Para empresas que querem escalar o atendimento.',
       feats: ['10 agentes de IA', 'Mensagens ilimitadas', 'WhatsApp + Instagram', 'Academia completa', 'Analytics em tempo real', 'Marketplace de Apps'],
-      off:   ['API dedicada'],
+      off: ['API dedicada'],
       cta: 'Assinar agora', best: true,
     },
     {
       name: 'Enterprise', price: null, period: '',
       desc: 'Solução sob medida para grandes operações.',
       feats: ['Agentes ilimitados', 'Canais ilimitados', 'SLA 99.9% garantido', 'Suporte dedicado 24/7', 'API dedicada', 'Deploy on-premise', 'Treinamento presencial'],
-      off:   [],
+      off: [],
       cta: 'Falar com vendas', best: false,
     },
   ]
-
   return (
     <section className="sec" id="precos">
       <div className="wrap">
@@ -416,11 +379,7 @@ function Pricing({ onOpenModal }: { onOpenModal: () => void }) {
                 <div className="p-name">{pl.name}</div>
                 <div className="p-price">
                   {pl.price !== null ? (
-                    <>
-                      <span className="p-cur">R$</span>
-                      <span className="p-amt">{pl.price}</span>
-                      <span className="p-per">{pl.period}</span>
-                    </>
+                    <><span className="p-cur">R$</span><span className="p-amt">{pl.price}</span><span className="p-per">{pl.period}</span></>
                   ) : (
                     <span className="p-amt" style={{ fontSize: 38 }}>Custom</span>
                   )}
@@ -430,10 +389,10 @@ function Pricing({ onOpenModal }: { onOpenModal: () => void }) {
                   {pl.feats.map((f, j) => <li key={j}>{f}</li>)}
                   {pl.off.map((f, j)   => <li key={j} className="off">{f}</li>)}
                 </ul>
-                <button
-                  className={`btn-plan ${pl.best ? 'best' : ''}`}
-                  onClick={onOpenModal}
-                >{pl.cta}</button>
+                <button className={`btn-plan ${pl.best ? 'best' : ''}`}
+                  onClick={() => { GA.ctaClick(`pricing_${pl.name.toLowerCase()}`); onOpenModal() }}>
+                  {pl.cta}
+                </button>
               </div>
             </Reveal>
           ))}
@@ -443,9 +402,6 @@ function Pricing({ onOpenModal }: { onOpenModal: () => void }) {
   )
 }
 
-/* ─────────────────────────────────────
-   CTA
-───────────────────────────────────── */
 function CTA({ onOpenModal }: { onOpenModal: () => void }) {
   return (
     <section className="cta-sec" id="contato">
@@ -455,17 +411,20 @@ function CTA({ onOpenModal }: { onOpenModal: () => void }) {
         <h2>Pronto para crescer<br />com inteligência artificial?</h2>
         <p>Junte-se a milhares de empresas que já transformaram seus processos com a Kteck.</p>
         <div className="cta-btns">
-          <button className="btn-primary" onClick={onOpenModal}>Criar conta gratuita</button>
-          <button className="btn-outline" onClick={onOpenModal}>Agendar demo personalizada</button>
+          <button className="btn-primary"
+            onClick={() => { GA.ctaClick('CTA Final — Criar conta'); onOpenModal() }}>
+            Criar conta gratuita
+          </button>
+          <button className="btn-outline"
+            onClick={() => { GA.ctaClick('CTA Final — Agendar demo'); onOpenModal() }}>
+            Agendar demo personalizada
+          </button>
         </div>
       </Reveal>
     </section>
   )
 }
 
-/* ─────────────────────────────────────
-   FOOTER
-───────────────────────────────────── */
 function Footer() {
   const cols = [
     { title: 'Produto',  links: ['Agentes de IA', 'Automações', 'Marketplace', 'Academia', 'API'] },
@@ -486,9 +445,7 @@ function Footer() {
         {cols.map((c, i) => (
           <div key={i} className="foot-col">
             <h4>{c.title}</h4>
-            <ul>
-              {c.links.map((l, j) => <li key={j}><a href="#">{l}</a></li>)}
-            </ul>
+            <ul>{c.links.map((l, j) => <li key={j}><a href="#">{l}</a></li>)}</ul>
           </div>
         ))}
       </div>
@@ -500,24 +457,20 @@ function Footer() {
   )
 }
 
-/* ─────────────────────────────────────
-   PAGE
-───────────────────────────────────── */
 export default function Home() {
   const [modalOpen, setModalOpen] = useState(false)
-
   return (
     <>
       <LeadModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
-      <Navbar        onOpenModal={() => setModalOpen(true)} />
-      <Hero          onOpenModal={() => setModalOpen(true)} />
+      <Navbar    onOpenModal={() => setModalOpen(true)} />
+      <Hero      onOpenModal={() => setModalOpen(true)} />
       <Logos />
       <Features />
       <PlatformMockup />
       <HowItWorks />
-      <Academy       onOpenModal={() => setModalOpen(true)} />
-      <Pricing       onOpenModal={() => setModalOpen(true)} />
-      <CTA           onOpenModal={() => setModalOpen(true)} />
+      <Academy   onOpenModal={() => setModalOpen(true)} />
+      <Pricing   onOpenModal={() => setModalOpen(true)} />
+      <CTA       onOpenModal={() => setModalOpen(true)} />
       <Footer />
     </>
   )
