@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import LeadModal from '@/components/LeadModal'
 
 /* ─────────────────────────────────────
    REVEAL WRAPPER — scroll animation
@@ -27,7 +28,7 @@ function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
 /* ─────────────────────────────────────
    NAVBAR
 ───────────────────────────────────── */
-function Navbar() {
+function Navbar({ onOpenModal }: { onOpenModal: () => void }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
 
@@ -39,9 +40,9 @@ function Navbar() {
 
   const links = [
     { href: '#funcionalidades', label: 'Plataforma' },
-    { href: '#academia',        label: 'Academia'  },
-    { href: '#precos',          label: 'Preços'    },
-    { href: '#contato',         label: 'Contato'   },
+    { href: '#academia',        label: 'Academia'   },
+    { href: '#precos',          label: 'Preços'     },
+    { href: '#contato',         label: 'Contato'    },
   ]
 
   return (
@@ -55,7 +56,7 @@ function Navbar() {
 
         <div className="nav-actions">
           <button className="btn-ghost-nav">Entrar</button>
-          <button className="btn-cta-nav">Começar grátis →</button>
+          <button className="btn-cta-nav" onClick={onOpenModal}>Começar grátis →</button>
           <button className="nav-hamburger" onClick={() => setOpen(o => !o)}>
             {open ? '✕' : '☰'}
           </button>
@@ -67,7 +68,8 @@ function Navbar() {
           {links.map(l => (
             <a key={l.href} href={l.href} onClick={() => setOpen(false)}>{l.label}</a>
           ))}
-          <button className="btn-cta-nav" style={{ width: '100%', padding: 14, marginTop: 4 }}>
+          <button className="btn-cta-nav" onClick={() => { onOpenModal(); setOpen(false) }}
+            style={{ width: '100%', padding: 14, marginTop: 4 }}>
             Começar grátis →
           </button>
         </div>
@@ -79,19 +81,19 @@ function Navbar() {
 /* ─────────────────────────────────────
    HERO
 ───────────────────────────────────── */
-function Hero() {
+function Hero({ onOpenModal }: { onOpenModal: () => void }) {
   const stats = [
-    { val: '+3.400', lbl: 'Empresas ativas'    },
-    { val: '98%',    lbl: 'Satisfação'         },
-    { val: '12M+',   lbl: 'Mensagens / mês'    },
-    { val: '<60s',   lbl: 'Tempo de setup'     },
+    { val: '+3.400', lbl: 'Empresas ativas' },
+    { val: '98%',    lbl: 'Satisfação'      },
+    { val: '12M+',   lbl: 'Mensagens / mês' },
+    { val: '<60s',   lbl: 'Tempo de setup'  },
   ]
 
   return (
     <section className="hero">
       <div className="hero-grid" />
-      <div className="hero-halo"  />
-      <div className="hero-ring"  />
+      <div className="hero-halo" />
+      <div className="hero-ring" />
 
       <div className="hero-inner">
         <div className="hero-badge">
@@ -110,7 +112,7 @@ function Hero() {
         </p>
 
         <div className="hero-btns">
-          <button className="btn-primary">Testar gratuitamente</button>
+          <button className="btn-primary" onClick={onOpenModal}>Testar gratuitamente</button>
           <button className="btn-outline">Ver demonstração ▶</button>
         </div>
 
@@ -147,12 +149,12 @@ function Logos() {
 ───────────────────────────────────── */
 function Features() {
   const cards = [
-    { icon: '🤖', title: 'Agentes de IA',         desc: 'Crie assistentes treinados com o conhecimento da sua empresa. Atendimento 24h no WhatsApp, Instagram e site.', tag: 'Plug & Play'   },
-    { icon: '⚡', title: 'Automações sem código',  desc: 'Conecte seus sistemas visualmente. Integre CRMs, ERPs e qualquer API sem escrever uma linha de código.',       tag: 'No-code'      },
-    { icon: '📊', title: 'Analytics em tempo real',desc: 'Dashboard com métricas de atendimento, conversão e satisfação. IA que sugere melhorias automaticamente.',       tag: 'Tempo real'   },
-    { icon: '🎓', title: 'Academia Kteck',          desc: 'Cursos práticos com certificação para sua equipe dominar a IA. Do básico ao avançado, no seu ritmo.',          tag: 'Certificação' },
-    { icon: '📦', title: 'Marketplace de Apps',    desc: 'Instale soluções prontas de IA por setor em um clique. Jurídico, saúde, varejo, imobiliário e muito mais.',    tag: '+120 apps'    },
-    { icon: '🔐', title: 'Segurança Enterprise',   desc: 'LGPD compliant, dados no Brasil, criptografia end-to-end e controle granular de permissões por usuário.',       tag: 'LGPD'         },
+    { icon: '🤖', title: 'Agentes de IA',          desc: 'Crie assistentes treinados com o conhecimento da sua empresa. Atendimento 24h no WhatsApp, Instagram e site.', tag: 'Plug & Play'   },
+    { icon: '⚡', title: 'Automações sem código',   desc: 'Conecte seus sistemas visualmente. Integre CRMs, ERPs e qualquer API sem escrever uma linha de código.',       tag: 'No-code'      },
+    { icon: '📊', title: 'Analytics em tempo real', desc: 'Dashboard com métricas de atendimento, conversão e satisfação. IA que sugere melhorias automaticamente.',       tag: 'Tempo real'   },
+    { icon: '🎓', title: 'Academia Kteck',           desc: 'Cursos práticos com certificação para sua equipe dominar a IA. Do básico ao avançado, no seu ritmo.',          tag: 'Certificação' },
+    { icon: '📦', title: 'Marketplace de Apps',     desc: 'Instale soluções prontas de IA por setor em um clique. Jurídico, saúde, varejo, imobiliário e muito mais.',    tag: '+120 apps'    },
+    { icon: '🔐', title: 'Segurança Enterprise',    desc: 'LGPD compliant, dados no Brasil, criptografia end-to-end e controle granular de permissões por usuário.',       tag: 'LGPD'         },
   ]
 
   return (
@@ -205,14 +207,11 @@ function PlatformMockup() {
         </Reveal>
         <Reveal delay={100}>
           <div className="mockup">
-            {/* window chrome */}
             <div className="mockup-bar">
               <span className="dr" /><span className="dy" /><span className="dg" />
               <span className="mockup-url">app.kteck.com.br/dashboard</span>
             </div>
-
             <div className="mockup-body">
-              {/* sidebar */}
               <div className="mock-side">
                 <div className="mock-sec-lbl">Menu</div>
                 {sideItems.map((it, i) => (
@@ -225,14 +224,11 @@ function PlatformMockup() {
                   <div key={i} className="mock-item"><span>{it.icon}</span>{it.label}</div>
                 ))}
               </div>
-
-              {/* main content */}
               <div className="mock-main">
                 <div className="mock-topbar">
                   <h4>Visão Geral</h4>
                   <span>Últimos 7 dias ▾</span>
                 </div>
-
                 <div className="metrics">
                   <div className="m-card">
                     <div className="m-val">2.841</div>
@@ -250,7 +246,6 @@ function PlatformMockup() {
                     <div className="m-delta up">↑ +24%</div>
                   </div>
                 </div>
-
                 <div className="chat-box">
                   <div className="chat-head">
                     <span className="chat-dot" />
@@ -294,10 +289,10 @@ function PlatformMockup() {
 ───────────────────────────────────── */
 function HowItWorks() {
   const items = [
-    { n: '01', title: 'Crie sua conta',     desc: 'Cadastro em 30 segundos, sem cartão de crédito. Acesso imediato a todos os recursos.' },
-    { n: '02', title: 'Treine seu agente',  desc: 'Cole o link do seu site ou faça upload de documentos. A IA aprende em minutos.'      },
-    { n: '03', title: 'Conecte os canais',  desc: 'WhatsApp, Instagram, site ou API. Um clique para integrar cada canal.'                },
-    { n: '04', title: 'Monitore e escale',  desc: 'Veja conversas em tempo real, ajuste e expanda para novos canais e equipes.'          },
+    { n: '01', title: 'Crie sua conta',    desc: 'Cadastro em 30 segundos, sem cartão de crédito. Acesso imediato a todos os recursos.' },
+    { n: '02', title: 'Treine seu agente', desc: 'Cole o link do seu site ou faça upload de documentos. A IA aprende em minutos.'       },
+    { n: '03', title: 'Conecte os canais', desc: 'WhatsApp, Instagram, site ou API. Um clique para integrar cada canal.'                 },
+    { n: '04', title: 'Monitore e escale', desc: 'Veja conversas em tempo real, ajuste e expanda para novos canais e equipes.'           },
   ]
   return (
     <section className="sec" id="como-funciona">
@@ -326,12 +321,12 @@ function HowItWorks() {
 /* ─────────────────────────────────────
    ACADEMY
 ───────────────────────────────────── */
-function Academy() {
+function Academy({ onOpenModal }: { onOpenModal: () => void }) {
   const courses = [
-    { emoji: '🤖', title: 'Agentes de IA',  meta: '12 aulas', level: 'Iniciante'    },
-    { emoji: '⚡', title: 'Automações',      meta: '18 aulas', level: 'Intermediário'},
-    { emoji: '💬', title: 'WhatsApp IA',     meta: '9 aulas',  level: 'Iniciante'    },
-    { emoji: '🚀', title: 'Vender com IA',   meta: '15 aulas', level: 'Avançado'     },
+    { emoji: '🤖', title: 'Agentes de IA', meta: '12 aulas', level: 'Iniciante'     },
+    { emoji: '⚡', title: 'Automações',     meta: '18 aulas', level: 'Intermediário' },
+    { emoji: '💬', title: 'WhatsApp IA',    meta: '9 aulas',  level: 'Iniciante'     },
+    { emoji: '🚀', title: 'Vender com IA',  meta: '15 aulas', level: 'Avançado'      },
   ]
   return (
     <section className="sec sec-alt" id="academia">
@@ -354,7 +349,7 @@ function Academy() {
                 <span>✓</span><span>{t}</span>
               </div>
             ))}
-            <button className="btn-primary" style={{ marginTop: 28 }}>
+            <button className="btn-primary" style={{ marginTop: 28 }} onClick={onOpenModal}>
               Explorar cursos
             </button>
           </Reveal>
@@ -380,7 +375,7 @@ function Academy() {
 /* ─────────────────────────────────────
    PRICING
 ───────────────────────────────────── */
-function Pricing() {
+function Pricing({ onOpenModal }: { onOpenModal: () => void }) {
   const plans = [
     {
       name: 'Starter', price: '0', period: '/mês',
@@ -435,7 +430,10 @@ function Pricing() {
                   {pl.feats.map((f, j) => <li key={j}>{f}</li>)}
                   {pl.off.map((f, j)   => <li key={j} className="off">{f}</li>)}
                 </ul>
-                <button className={`btn-plan ${pl.best ? 'best' : ''}`}>{pl.cta}</button>
+                <button
+                  className={`btn-plan ${pl.best ? 'best' : ''}`}
+                  onClick={onOpenModal}
+                >{pl.cta}</button>
               </div>
             </Reveal>
           ))}
@@ -448,7 +446,7 @@ function Pricing() {
 /* ─────────────────────────────────────
    CTA
 ───────────────────────────────────── */
-function CTA() {
+function CTA({ onOpenModal }: { onOpenModal: () => void }) {
   return (
     <section className="cta-sec" id="contato">
       <div className="cta-halo" />
@@ -457,8 +455,8 @@ function CTA() {
         <h2>Pronto para crescer<br />com inteligência artificial?</h2>
         <p>Junte-se a milhares de empresas que já transformaram seus processos com a Kteck.</p>
         <div className="cta-btns">
-          <button className="btn-primary">Criar conta gratuita</button>
-          <button className="btn-outline">Agendar demo personalizada</button>
+          <button className="btn-primary" onClick={onOpenModal}>Criar conta gratuita</button>
+          <button className="btn-outline" onClick={onOpenModal}>Agendar demo personalizada</button>
         </div>
       </Reveal>
     </section>
@@ -471,8 +469,8 @@ function CTA() {
 function Footer() {
   const cols = [
     { title: 'Produto',  links: ['Agentes de IA', 'Automações', 'Marketplace', 'Academia', 'API'] },
-    { title: 'Empresa',  links: ['Sobre nós', 'Blog', 'Carreiras', 'Imprensa']                     },
-    { title: 'Suporte',  links: ['Documentação', 'Central de ajuda', 'Status', 'Contato']          },
+    { title: 'Empresa',  links: ['Sobre nós', 'Blog', 'Carreiras', 'Imprensa']                    },
+    { title: 'Suporte',  links: ['Documentação', 'Central de ajuda', 'Status', 'Contato']         },
   ]
   return (
     <footer>
@@ -506,17 +504,20 @@ function Footer() {
    PAGE
 ───────────────────────────────────── */
 export default function Home() {
+  const [modalOpen, setModalOpen] = useState(false)
+
   return (
     <>
-      <Navbar />
-      <Hero />
+      <LeadModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <Navbar        onOpenModal={() => setModalOpen(true)} />
+      <Hero          onOpenModal={() => setModalOpen(true)} />
       <Logos />
       <Features />
       <PlatformMockup />
       <HowItWorks />
-      <Academy />
-      <Pricing />
-      <CTA />
+      <Academy       onOpenModal={() => setModalOpen(true)} />
+      <Pricing       onOpenModal={() => setModalOpen(true)} />
+      <CTA           onOpenModal={() => setModalOpen(true)} />
       <Footer />
     </>
   )
