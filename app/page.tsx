@@ -24,8 +24,9 @@ function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
 }
 
 function Navbar({ onOpenModal }: { onOpenModal: () => void }) {
-  const [scrolled, setScrolled] = useState(false)
-  const [open, setOpen] = useState(false)
+  const [scrolled,     setScrolled]     = useState(false)
+  const [open,         setOpen]         = useState(false)
+  const [servicesOpen, setServicesOpen] = useState(false)
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 24)
@@ -33,23 +34,81 @@ function Navbar({ onOpenModal }: { onOpenModal: () => void }) {
     return () => window.removeEventListener('scroll', fn)
   }, [])
 
-  const links = [
-    { href: '#funcionalidades', label: 'Plataforma' },
-    { href: '#academia',        label: 'Academia'   },
-    { href: '#precos',          label: 'Preços'     },
-    { href: '#contato',         label: 'Contato'    },
+  const services = [
+    { href: '/ia',         icon: '🤖', label: 'IA & Chatbots',       desc: 'Agentes e automação'     },
+    { href: '/suporte-ti', icon: '🖥️', label: 'Suporte de TI',       desc: 'TI gerenciado'           },
+    { href: '/cloud',      icon: '☁️', label: 'Cloud',               desc: 'Infraestrutura em nuvem' },
+    { href: '/seguranca',  icon: '🔐', label: 'Segurança',           desc: 'Proteção de dados'       },
   ]
 
   return (
     <>
       <nav className="nav" style={{ borderBottomColor: scrolled ? 'var(--border2)' : 'var(--border)' }}>
         <a href="#" className="nav-logo">K<span>teck</span></a>
+
         <ul className="nav-links">
-          {links.map(l => <li key={l.href}><a href={l.href}>{l.label}</a></li>)}
+          {/* dropdown Serviços */}
+          <li style={{ position: 'relative' }}
+            onMouseEnter={() => setServicesOpen(true)}
+            onMouseLeave={() => setServicesOpen(false)}
+          >
+            <a href="#" style={{ display: 'flex', alignItems: 'center', gap: 4 }}
+              onClick={e => e.preventDefault()}>
+              Serviços <span style={{ fontSize: 10, opacity: .7 }}>▼</span>
+            </a>
+            {servicesOpen && (
+              <div style={{
+                position: 'absolute', top: '100%', left: '50%',
+                transform: 'translateX(-50%)',
+                marginTop: 12, background: 'var(--surface)',
+                border: '1px solid var(--border2)', borderRadius: 14,
+                padding: '10px', minWidth: 280,
+                boxShadow: '0 16px 40px rgba(0,0,0,0.4)',
+                zIndex: 200,
+              }}>
+                {/* ponteiro */}
+                <div style={{
+                  position: 'absolute', top: -6, left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: 12, height: 12,
+                  background: 'var(--surface)',
+                  border: '1px solid var(--border2)',
+                  borderRight: 'none', borderBottom: 'none',
+                  rotate: '45deg',
+                }} />
+                {services.map(s => (
+                  <a key={s.href} href={s.href} style={{
+                    display: 'flex', alignItems: 'center', gap: 12,
+                    padding: '10px 12px', borderRadius: 10,
+                    textDecoration: 'none', transition: 'background .15s',
+                  }}
+                    onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface2)')}
+                    onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                  >
+                    <span style={{
+                      fontSize: 18, width: 36, height: 36, borderRadius: 8,
+                      background: 'var(--accent-dim)', border: '1px solid var(--accent-bdr)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      flexShrink: 0,
+                    }}>{s.icon}</span>
+                    <div>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>{s.label}</div>
+                      <div style={{ fontSize: 12, color: 'var(--text2)' }}>{s.desc}</div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            )}
+          </li>
+          <li><a href="#academia">Academia</a></li>
+          <li><a href="#precos">Preços</a></li>
+          <li><a href="#contato">Contato</a></li>
         </ul>
+
         <div className="nav-actions">
           <button className="btn-ghost-nav">Entrar</button>
-          <button className="btn-cta-nav" onClick={() => { GA.ctaClick('Navbar — Começar grátis'); onOpenModal() }}>
+          <button className="btn-cta-nav"
+            onClick={() => { GA.ctaClick('navbar_comecar_gratis'); onOpenModal() }}>
             Começar grátis →
           </button>
           <button className="nav-hamburger" onClick={() => setOpen(o => !o)}>
@@ -58,13 +117,24 @@ function Navbar({ onOpenModal }: { onOpenModal: () => void }) {
         </div>
       </nav>
 
+      {/* drawer mobile */}
       {open && (
         <div className="nav-drawer">
-          {links.map(l => (
-            <a key={l.href} href={l.href} onClick={() => setOpen(false)}>{l.label}</a>
+          <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: 1.5, color: 'var(--text3)', textTransform: 'uppercase', marginBottom: 4 }}>
+            Serviços
+          </div>
+          {services.map(s => (
+            <a key={s.href} href={s.href} onClick={() => setOpen(false)}
+              style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span>{s.icon}</span>{s.label}
+            </a>
           ))}
+          <div style={{ height: 1, background: 'var(--border)', margin: '4px 0' }} />
+          <a href="#academia" onClick={() => setOpen(false)}>Academia</a>
+          <a href="#precos"   onClick={() => setOpen(false)}>Preços</a>
+          <a href="#contato"  onClick={() => setOpen(false)}>Contato</a>
           <button className="btn-cta-nav"
-            onClick={() => { GA.ctaClick('Navbar Mobile — Começar grátis'); onOpenModal(); setOpen(false) }}
+            onClick={() => { GA.ctaClick('navbar_mobile_comecar_gratis'); onOpenModal(); setOpen(false) }}
             style={{ width: '100%', padding: 14, marginTop: 4 }}>
             Começar grátis →
           </button>
@@ -427,9 +497,33 @@ function CTA({ onOpenModal }: { onOpenModal: () => void }) {
 
 function Footer() {
   const cols = [
-    { title: 'Produto',  links: ['Agentes de IA', 'Automações', 'Marketplace', 'Academia', 'API'] },
-    { title: 'Empresa',  links: ['Sobre nós', 'Blog', 'Carreiras', 'Imprensa']                    },
-    { title: 'Suporte',  links: ['Documentação', 'Central de ajuda', 'Status', 'Contato']         },
+    {
+      title: 'Serviços',
+      links: [
+        { label: 'IA & Chatbots',  href: '/ia'         },
+        { label: 'Suporte de TI',  href: '/suporte-ti' },
+        { label: 'Cloud',          href: '/cloud'       },
+        { label: 'Segurança',      href: '/seguranca'   },
+      ]
+    },
+    {
+      title: 'Empresa',
+      links: [
+        { label: 'Sobre nós',  href: '#' },
+        { label: 'Blog',       href: '#' },
+        { label: 'Carreiras',  href: '#' },
+        { label: 'Imprensa',   href: '#' },
+      ]
+    },
+    {
+      title: 'Suporte',
+      links: [
+        { label: 'Documentação',     href: '#' },
+        { label: 'Central de ajuda', href: '#' },
+        { label: 'Status',           href: '#' },
+        { label: 'Contato',          href: '#' },
+      ]
+    },
   ]
   return (
     <footer>
@@ -445,7 +539,11 @@ function Footer() {
         {cols.map((c, i) => (
           <div key={i} className="foot-col">
             <h4>{c.title}</h4>
-            <ul>{c.links.map((l, j) => <li key={j}><a href="#">{l}</a></li>)}</ul>
+            <ul>
+              {c.links.map((l, j) => (
+                <li key={j}><a href={l.href}>{l.label}</a></li>
+              ))}
+            </ul>
           </div>
         ))}
       </div>
