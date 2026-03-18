@@ -102,6 +102,7 @@ function Navbar({ onOpenModal }: { onOpenModal: () => void }) {
           </li>
           <li><a href="#academia">Academia</a></li>
           <li><a href="#precos">Preços</a></li>
+          <li><a href="/sobre">Sobre</a></li>
           <li><a href="#contato">Contato</a></li>
         </ul>
 
@@ -132,6 +133,7 @@ function Navbar({ onOpenModal }: { onOpenModal: () => void }) {
           <div style={{ height: 1, background: 'var(--border)', margin: '4px 0' }} />
           <a href="#academia" onClick={() => setOpen(false)}>Academia</a>
           <a href="#precos"   onClick={() => setOpen(false)}>Preços</a>
+          <a href="/sobre"    onClick={() => setOpen(false)}>Sobre</a>
           <a href="#contato"  onClick={() => setOpen(false)}>Contato</a>
           <button className="btn-cta-nav"
             onClick={() => { GA.ctaClick('navbar_mobile_comecar_gratis'); onOpenModal(); setOpen(false) }}
@@ -509,10 +511,10 @@ function Footer() {
     {
       title: 'Empresa',
       links: [
-        { label: 'Sobre nós',  href: '#' },
-        { label: 'Blog',       href: '#' },
-        { label: 'Carreiras',  href: '#' },
-        { label: 'Imprensa',   href: '#' },
+        { label: 'Sobre nós',  href: '/sobre' },
+        { label: 'Blog',       href: '#'      },
+        { label: 'Carreiras',  href: '#'      },
+        { label: 'Imprensa',   href: '#'      },
       ]
     },
     {
