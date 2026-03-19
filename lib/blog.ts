@@ -45,5 +45,6 @@ export function getPostBySlug(slug: string): Post | null {
 
 export function getCategories(): string[] {
   const posts = getAllPosts()
-  return [...new Set(posts.map(p => p.category))].filter(Boolean)
+  const set = new Set(posts.map(p => p.category))
+  return Array.from(set).filter(Boolean)
 }
